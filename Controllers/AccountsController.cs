@@ -364,13 +364,9 @@ namespace ChatManager.Controllers
             OnlineUsers.RemoveSessionUser();
             return RedirectToAction("Login");
         }
-        
-        [OnlineUsers.AdminAccess]
-        public ActionResult LoginsJournal()
-        {
-            return View();
-        }
         #endregion
+
+        #region Admin Pages
         [OnlineUsers.AdminAccess]
         public ActionResult GroupEmail(string status = "")
         {
@@ -391,6 +387,29 @@ namespace ChatManager.Controllers
             ViewBag.Users = DB.Users.SortedUsers();
             return View(groupEmail);
         }
+
+        [OnlineUsers.AdminAccess]
+        public ActionResult UsersList()
+        {
+            return View();
+        }
+        [OnlineUsers.AdminAccess]
+        public ActionResult GetUsersList(bool forceRefresh = false)
+        {
+            if (forceRefresh || OnlineUsers.HasChanged() || DB.Users.HasChanged)
+            {
+                return PartialView(DB.Users.SortedUsers());
+            }
+            return null;
+        }
+
+        [OnlineUsers.AdminAccess]
+        public ActionResult LoginsJournal()
+        {
+            return View();
+        }
+        #endregion
+
         #region Administrator actions
         public JsonResult NeedUpdate()
         {
@@ -473,24 +492,7 @@ namespace ChatManager.Controllers
             {
                 return Json(false, JsonRequestBehavior.AllowGet);
             }
-        }
-        [OnlineUsers.AdminAccess]
-        public ActionResult UsersList()
-        {
-            return View();
-        }
-        [OnlineUsers.AdminAccess]
-        public ActionResult GetUsersList(bool forceRefresh = false)
-        {
-            if (forceRefresh || OnlineUsers.HasChanged() || DB.Users.HasChanged)
-            {
-                return PartialView(DB.Users.SortedUsers());
-            }
-            return null;
-        }
-
-        
+        }        
         #endregion
-
     }
 }

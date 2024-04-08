@@ -143,6 +143,7 @@
     <Compile Include="Models\ResetPasswordCommand.cs" />
     <Compile Include="Models\SelectListUtilities.cs" />
     <Compile Include="Models\UnverifiedEmail.cs" />
+    <Compile Include="Models\Connection.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UsersRepository.cs" />
     <Compile Include="Models\UserType.cs" />

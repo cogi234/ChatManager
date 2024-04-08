@@ -45,6 +45,7 @@ namespace ChatManager.Models
         }
         public static void SetHasChanged()
         {
+            DB.Connections.MarkHasChanged();
             SerialNumber = Guid.NewGuid().ToString();
         }
         #endregion
