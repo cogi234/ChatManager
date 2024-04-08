@@ -69,7 +69,7 @@ namespace ChatManager.Models
             Connection connection = DB.Connections.ToList()
                 .OrderBy((con) => con.StartDate)
                 .LastOrDefault((con) => con.UserId == user.Id);
-            if (connection != null)
+            if (connection != null && connection.EndDate == DateTime.MinValue)
             {
                 connection.EndDate = DateTime.Now;
                 DB.Connections.Update(connection);
