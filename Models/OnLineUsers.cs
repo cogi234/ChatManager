@@ -53,6 +53,9 @@ namespace ChatManager.Models
         {
             HttpContext.Current.Session["UserId"] = userId;
             ConnectedUsersId.Add(userId);
+
+            DB.Connections.Add(new Connection { UserId = userId, StartDate = DateTime.Now });
+
             SetHasChanged();
         }
         public static void RemoveSessionUser()
@@ -61,6 +64,16 @@ namespace ChatManager.Models
             if (user != null)
                 ConnectedUsersId.Remove(user.Id);
             HttpContext.Current?.Session.Abandon();
+
+            Connection connection = DB.Connections.ToList()
+                .OrderBy((con) => con.StartDate)
+                .LastOrDefault((con) => con.UserId == user.Id);
+            if (connection != null)
+            {
+                connection.EndDate = DateTime.Now;
+                DB.Connections.Update(connection);
+            }
+
             SetHasChanged();
         }
         public static bool IsOnLine(int userId)
