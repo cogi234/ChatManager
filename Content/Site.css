@@ -341,7 +341,7 @@ input[type=checkbox] {
 
 .connectionContainer {
     display: grid;
-    grid-template-columns: 180px auto 90px;
+    grid-template-columns: 180px auto 85px;
     align-items: center;
     height: 50px;
 }
