@@ -66,7 +66,9 @@ namespace ChatManager.Models
                 ConnectedUsersId.Remove(user.Id);
             HttpContext.Current?.Session.Abandon();
 
-            Connection connection = DB.Connections.ToList()
+            Connection connection = null;
+            if (user != null)
+                connection = DB.Connections.ToList()
                 .OrderBy((con) => con.StartDate)
                 .LastOrDefault((con) => con.UserId == user.Id);
             if (connection != null && connection.EndDate == DateTime.MinValue)

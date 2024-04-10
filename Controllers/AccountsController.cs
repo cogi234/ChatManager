@@ -408,6 +408,15 @@ namespace ChatManager.Controllers
         {
             return View();
         }
+        [OnlineUsers.AdminAccess]
+        public ActionResult GetConnections(bool forceRefresh = false)
+        {
+            if (forceRefresh || DB.Connections.HasChanged || DB.Users.HasChanged)
+            {
+                return PartialView(DB.Connections.ToList().OrderByDescending(c => c.StartDate));
+            }
+            return null;
+        }
         #endregion
 
         #region Administrator actions
