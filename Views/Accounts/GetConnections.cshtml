@@ -1,51 +1,64 @@
-﻿@model IEnumerable<ChatManager.Models.User>
+﻿@model IEnumerable<ChatManager.Models.Connection>
 
-@foreach (var item in Model)
+@if (Model.Count() > 0)
 {
-    if (item.Id != ChatManager.Models.OnlineUsers.GetSessionUser().Id)
+    var currentDay = Model.FirstOrDefault().StartDate.Date;
+    <hr />
+    <div>@currentDay.ToShortDateString() <span class="icon fa fa-window-close day-display" title="Supprimer cette journée" day="@currentDay.ToString()"></span></div>
+    <hr />
+
+    HashSet<int> alreadyUsedConnectedUsers = new HashSet<int>();
+
+    foreach (var item in Model)
     {
-        var emailReference = "mailto:" + item.Email;
-        bool isOnline = ChatManager.Models.OnlineUsers.IsOnLine(item.Id);
-        <div class="userContainer" style="font-size:14px;">
-            <a href="/Accounts/Edit/@item.Id" title="Compte créé le @item.CreationDate.ToShortDateString()">
-                @Helper.AvatarUser(item, "UserSmallAvatar")
-            </a>
-            <div style="text-align:center" title="Status de connexion">
-                @Helper.OnLineStatusIcon(isOnline, item.Blocked)
-            </div>
-            <div class="promoteUser" id="promote_@item.Id"href="/Accounts/PromoteUser?userid=@item.Id">
-                @Helper.UserTypeIcon(item.UserTypeId)
-            </div>
-            <div style="text-align:center" title="Status du compte">
-                @Helper.Checked(item.Verified)
-            </div>
-            <div style="text-align:center">
-                @if (!item.IsAdmin)
-                {
-                    if (item.Blocked)
-                    {
-                        <input type="checkbox" id="blocked_@item.Id" class="CB_Blocked" checked title="Ce compte est bloqué" />
-                    }
-                    else
-                    {
-                        <input type="checkbox" id="blocked_@item.Id" class="CB_Blocked" title="Ce compte est non bloqué" />
-                    }
-                }
-                else
-                {
+        if (item.StartDate.Date != currentDay)
+        {
+            currentDay = item.StartDate.Date;
+            <hr />
+            <div>@currentDay.ToShortDateString() <span class="icon fa fa-window-close day-display" title="Supprimer cette journée" day="@currentDay.ToString()"></span></div>
+            <hr />
+        }
+
+        var user = ChatManager.Models.DB.Users.Get(item.UserId);
+
+        if (item.EndDate == DateTime.MinValue)
+        {
+            if (ChatManager.Models.OnlineUsers.IsOnLine(item.UserId) && !alreadyUsedConnectedUsers.Contains(item.UserId))
+            {
+                alreadyUsedConnectedUsers.Add(item.UserId);
+                <div class="connectionContainer">
+                    @Helper.AvatarUser(user, "UserSmallAvatar")
                     <div></div>
-                }
-            </div>
-            <div>
-                @if (!item.IsAdmin)
-                {
-                    <div id="delete_@item.Id" class="DELETE_USER icon red fa fa-times-circle" title="Effacer l'usager @item.GetFullName()"></div>
-                }
-                else
-                {
+                    <div>
+                        @item.StartDate.ToShortTimeString() : <img class="small_icon" src=/Content/UI-Icons/OnLine.png>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="connectionContainer">
+                    @Helper.AvatarUser(user, "UserSmallAvatar")
                     <div></div>
-                }
+                    <div>
+                        @item.StartDate.ToShortTimeString() : <img class="small_icon" src=/Content/UI-Icons/timeout.png>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="connectionContainer">
+                @Helper.AvatarUser(user, "UserSmallAvatar")
+                <div></div>
+                <div>
+                    @item.StartDate.ToShortTimeString() : @item.EndDate.ToShortTimeString()
+                </div>
             </div>
-        </div>
+        }
+
     }
+}
+else
+{
+    <div></div>
 }

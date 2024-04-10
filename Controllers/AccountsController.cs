@@ -501,7 +501,26 @@ namespace ChatManager.Controllers
             {
                 return Json(false, JsonRequestBehavior.AllowGet);
             }
-        }        
+        }
+
+        [OnlineUsers.AdminAccess]
+        public void DeleteConnectionDay(DateTime date)
+        {
+            var connections = DB.Connections.ToList();
+            List<int> toDelete = new List<int>();
+            foreach (var connection in connections)
+            {
+                if (connection.StartDate.Date == date.Date)
+                {
+                    toDelete.Add(connection.Id);
+                }
+            }
+
+            foreach (int id in toDelete)
+            {
+                DB.Connections.Delete(id);
+            }
+        }
         #endregion
     }
 }

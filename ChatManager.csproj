@@ -284,6 +284,7 @@
     <Content Include="Views\ChatRoom\Index.cshtml" />
     <Content Include="Views\Accounts\LoginsJournal.cshtml" />
     <Content Include="Views\FriendShips\Index.cshtml" />
+    <Content Include="Views\Accounts\GetConnections.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Notifications\" />

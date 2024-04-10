@@ -1,7 +1,18 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "LoginsJournal";
 }
 
 <h2>Journal des connexions</h2>
+<div id="ConnectionsListContainer"></div>
 
+@section Scripts {
+    <script defer>
+        initTimeout(120);
+        let GetConnections = new PartialRefresh("@Url.Action("GetConnections")", "ConnectionsListContainer", 5, function () {
+            $(".day-display").on("click", function () {
+                let day = $(this).attr("day");
+                GetConnections.confirmedCommand("Supprimer cette journée?", "@Url.Action("DeleteConnectionDay")" + "?date=" + day);
+            })
+        });
+    </script>
+}

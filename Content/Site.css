@@ -338,3 +338,10 @@ input[type=checkbox] {
     align-items: center;
     height: 50px;
 }
+
+.connectionContainer {
+    display: grid;
+    grid-template-columns: 180px auto 90px;
+    align-items: center;
+    height: 50px;
+}
