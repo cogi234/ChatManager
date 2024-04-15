@@ -207,7 +207,6 @@
     <Content Include="App_Data\Genders.json" />
     <Content Include="App_Data\ResetPasswordCommands.json" />
     <Content Include="App_Data\Users.json" />
-    <Content Include="App_Data\Connections.json" />
     <Content Include="App_Data\UnverifiedEmails.json" />
     <None Include="Properties\PublishProfiles\MDB2023 - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\MoviesRepository - Web Deploy.pubxml" />
