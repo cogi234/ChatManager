@@ -59,7 +59,7 @@ namespace ChatManager.Models
 
             SetHasChanged();
         }
-        public static void RemoveSessionUser()
+        public static void RemoveSessionUser(bool updateConnection = true)
         {
             User user = GetSessionUser();
             if (user != null)
@@ -71,7 +71,7 @@ namespace ChatManager.Models
                 connection = DB.Connections.ToList()
                 .OrderBy((con) => con.StartDate)
                 .LastOrDefault((con) => con.UserId == user.Id);
-            if (connection != null && connection.EndDate == DateTime.MinValue)
+            if (updateConnection && connection != null && connection.EndDate == DateTime.MinValue)
             {
                 connection.EndDate = DateTime.Now;
                 DB.Connections.Update(connection);

@@ -326,7 +326,7 @@ namespace ChatManager.Controllers
         public ActionResult Login(string message)
         {
             ViewBag.Message = message;
-            OnlineUsers.RemoveSessionUser();
+            OnlineUsers.RemoveSessionUser(false);
             return View(new LoginCredential());
         }
         [HttpPost]
