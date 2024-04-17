@@ -42,6 +42,7 @@ namespace ChatManager.Models
                     BeginTransaction();
                     RemoveUnverifiedEmails(userId);
                     RemoveResetPasswordCommands(userId);
+                    RemoveConnections(userId);
                     base.Delete(userId);
                     EndTransaction();
                     return true;
@@ -263,5 +264,14 @@ namespace ChatManager.Models
                                 .FirstOrDefault();
             return user;
         }
+
+        private void RemoveConnections(int userId)
+        {
+            IEnumerable<Connection> toDelete = DB.Connections.ToList().Where(c => c.UserId == userId);
+            foreach (Connection connection in toDelete)
+            {
+                DB.Connections.Delete(connection.Id);
+            }
+        } 
     }
 }
