@@ -1,4 +1,5 @@
 ﻿using ChatManager.Models;
+using Microsoft.Ajax.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,15 +16,45 @@ namespace MoviesDBManager.Controllers
             return View();
         }
 
-        public ActionResult GetRelationships(bool forceRefresh = false)
+        public ActionResult GetRelationships(bool forceRefresh = false, string search = "",
+            bool displayBlocked = true, bool displayFriend = true, bool displayDenied = true,
+            bool displayWaiting = true, bool displayRequest = true, bool displayNoRelation = true)
         {
             if (forceRefresh || OnlineUsers.HasChanged() || DB.Users.HasChanged || DB.Relationships.HasChanged)
             {
-                return PartialView(DB.Users.SortedUsers().Where((u) => u.Verified));
+                IEnumerable<User> users = DB.Users.SortedUsers().Where((u) => u.Verified);
+                User currentUser = OnlineUsers.GetSessionUser();
+
+                //We filter on the search
+                if (!search.IsNullOrWhiteSpace())
+                    users = users.Where((u) => u.GetFullName().Contains(search));
+                //We filter blocked users
+                if (!displayBlocked)
+                    users = users.Where((u) => !u.Blocked);
+                //We filter friends
+                if (!displayFriend)
+                    users = users.Where((u) => DB.Relationships.Get((currentUser.Id, u.Id)).Status != RelationshipStatus.Friend);
+                //We filter denied relationships
+                if (!displayDenied)
+                    users = users.Where((u) => DB.Relationships.Get((currentUser.Id, u.Id)).Status != RelationshipStatus.Denied &&
+                            DB.Relationships.Get((u.Id, currentUser.Id)).Status != RelationshipStatus.Denied);
+                //We filter waiting requests
+                if (!displayWaiting)
+                    users = users.Where((u) => DB.Relationships.Get((currentUser.Id, u.Id)).Status != RelationshipStatus.Request);
+                //We filter requests from users
+                if (!displayRequest)
+                    users = users.Where((u) => DB.Relationships.Get((u.Id, currentUser.Id)).Status != RelationshipStatus.Request);
+                //We filter users with no relation
+                if (!displayNoRelation)
+                    users = users.Where((u) => DB.Relationships.Get((currentUser.Id, u.Id)).Status != RelationshipStatus.None &&
+                            DB.Relationships.Get((u.Id, currentUser.Id)).Status != RelationshipStatus.None);
+
+                return PartialView(users);
             }
             return null;
         }
 
+        #region Request processing
         public void SendRequest(int userid)
         {
             User user = DB.Users.Get(userid);
@@ -91,5 +122,6 @@ namespace MoviesDBManager.Controllers
                 DB.Relationships.Update(currentReverseRelationship);
             }
         }
+        #endregion
     }
 }
