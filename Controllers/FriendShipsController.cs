@@ -24,7 +24,7 @@ namespace MoviesDBManager.Controllers
             return null;
         }
 
-        public JsonResult SendRequest(int userid)
+        public void SendRequest(int userid)
         {
             User user = DB.Users.Get(userid);
             User currentUser = OnlineUsers.GetSessionUser();
@@ -43,32 +43,8 @@ namespace MoviesDBManager.Controllers
                     DB.Relationships.Update(currentRelationship);
                 }
             }
-            return Json(true, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult RemoveRequest(int userid)
-        {
-            User user = DB.Users.Get(userid);
-            User currentUser = OnlineUsers.GetSessionUser();
-            if (user != null)
-            {
-                Relationship currentRelationship = DB.Relationships.Get((currentUser.Id, user.Id));
-                if (currentRelationship.Status == RelationshipStatus.Request)
-                {
-                    currentRelationship.Status = RelationshipStatus.None;
-                    DB.Relationships.Update(currentRelationship);
-                } else if (currentRelationship.Status == RelationshipStatus.Friend)
-                {
-                    Relationship currentReverseRelationship = DB.Relationships.Get((user.Id, currentUser.Id));
-                    currentReverseRelationship.Status = RelationshipStatus.None;
-                    DB.Relationships.Update(currentReverseRelationship);
-                    currentRelationship.Status = RelationshipStatus.None;
-                    DB.Relationships.Update(currentRelationship);
-                }
-            }
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
-        //TODO
-        public JsonResult AcceptRequest(int userid)
+        public void RemoveRequest(int userid)
         {
             User user = DB.Users.Get(userid);
             User currentUser = OnlineUsers.GetSessionUser();
@@ -89,31 +65,31 @@ namespace MoviesDBManager.Controllers
                     DB.Relationships.Update(currentRelationship);
                 }
             }
-            return Json(true, JsonRequestBehavior.AllowGet);
         }
-        //TODO
-        public JsonResult DenyRequest(int userid)
+        public void AcceptRequest(int userid)
         {
             User user = DB.Users.Get(userid);
             User currentUser = OnlineUsers.GetSessionUser();
             if (user != null)
             {
                 Relationship currentRelationship = DB.Relationships.Get((currentUser.Id, user.Id));
-                if (currentRelationship.Status == RelationshipStatus.Request)
-                {
-                    currentRelationship.Status = RelationshipStatus.None;
-                    DB.Relationships.Update(currentRelationship);
-                }
-                else if (currentRelationship.Status == RelationshipStatus.Friend)
-                {
-                    Relationship currentReverseRelationship = DB.Relationships.Get((user.Id, currentUser.Id));
-                    currentReverseRelationship.Status = RelationshipStatus.None;
-                    DB.Relationships.Update(currentReverseRelationship);
-                    currentRelationship.Status = RelationshipStatus.None;
-                    DB.Relationships.Update(currentRelationship);
-                }
+                Relationship currentReverseRelationship = DB.Relationships.Get((user.Id, currentUser.Id));
+                currentReverseRelationship.Status = RelationshipStatus.Friend;
+                DB.Relationships.Update(currentReverseRelationship);
+                currentRelationship.Status = RelationshipStatus.Friend;
+                DB.Relationships.Update(currentRelationship);
             }
-            return Json(true, JsonRequestBehavior.AllowGet);
+        }
+        public void DenyRequest(int userid)
+        {
+            User user = DB.Users.Get(userid);
+            User currentUser = OnlineUsers.GetSessionUser();
+            if (user != null)
+            {
+                Relationship currentReverseRelationship = DB.Relationships.Get((user.Id, currentUser.Id));
+                currentReverseRelationship.Status = RelationshipStatus.Denied;
+                DB.Relationships.Update(currentReverseRelationship);
+            }
         }
     }
 }
