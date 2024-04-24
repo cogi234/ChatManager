@@ -43,6 +43,7 @@ namespace ChatManager.Models
                     RemoveUnverifiedEmails(userId);
                     RemoveResetPasswordCommands(userId);
                     RemoveConnections(userId);
+                    RemoveRelationships(userId);
                     base.Delete(userId);
                     EndTransaction();
                     return true;
@@ -272,6 +273,15 @@ namespace ChatManager.Models
             {
                 DB.Connections.Delete(connection.Id);
             }
-        } 
+        }
+
+        private void RemoveRelationships(int userId)
+        {
+            IEnumerable<Relationship> toDelete = DB.Relationships.ToList().Where((r) => r.Id.from == userId || r.Id.to == userId);
+            foreach (Relationship relationship in toDelete)
+            {
+                DB.Relationships.Delete(relationship.Id);
+            }
+        }
     }
 }

@@ -1,7 +1,51 @@
 ﻿
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Gestion des amitiés";
 }
 
-<h2>Gestion des amitiés</h2>
+<div class="formLayout">
+    <h2>Gestion des amitiés</h2>
+    <hr />
+    <br />
+    <hr />
+    <div id="RelationshipsContainer"></div>
+</div>
 
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+<script defer>
+        initTimeout(120);
+        let GetUsersList = new PartialRefresh("@Url.Action("GetRelationships")", "RelationshipsContainer", 10);
+
+        function UpdateCheckboxChangeCallback() {
+            // renew button click call back
+            $(".send-request").click(
+                function () {
+                    let userid = this.id.split('_')[1];
+                    GetUsersList.command("@Url.Action("SendRequest")" + "?userid=" + userid);
+                }
+            );
+
+            $(".remove-request").click(
+                function () {
+                    let userid = this.id.split('_')[1];
+                    GetUsersList.command("@Url.Action("RemoveRequest")" + "?userid=" + userid);
+                }
+            );
+
+            $(".accept-request").click(
+                function () {
+                    let userid = this.id.split('_')[1];
+                    GetUsersList.command("@Url.Action("AcceptRequest")" + "?userid=" + userid);
+                }
+            )
+
+            $(".deny-request").click(
+                function () {
+                    let userid = this.id.split('_')[1];
+                    GetUsersList.command("@Url.Action("DenyRequest")" + "?userid=" + userid);
+                }
+            )
+</script>
+}

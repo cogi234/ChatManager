@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "UserList";
+    ViewBag.Title = "Liste des usagers";
 }
 
 
@@ -15,7 +15,6 @@
 
 <script defer>
         initTimeout(120);
-        //PartialRefresh.setEndSessionAction("@Url.Action("End","Session")");
         let GetUsersList = new PartialRefresh("@Url.Action("GetUsersList")", "UsersListContainer", 5, UpdateCheckboxChangeCallback);
 
         function UpdateCheckboxChangeCallback() {

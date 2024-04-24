@@ -114,6 +114,13 @@ body {
         -webkit-text-fill-color: #e0f1ff;
     }
 
+.static-icon {
+    font-size: 25px !important;
+    -webkit-text-stroke-width: 0.75px;
+    -webkit-text-stroke-color: #337ab7;
+    -webkit-text-fill-color: #337ab7;
+}
+
 .red {
     -webkit-text-stroke-color: red;
     -webkit-text-fill-color: red;

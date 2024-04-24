@@ -129,6 +129,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Relationship.cs" />
     <Compile Include="Models\GroupEmail.cs" />
     <Compile Include="Models\EmailView.cs" />
     <Compile Include="Models\Gender.cs" />
@@ -139,6 +140,7 @@
     <Compile Include="Models\Notifications.cs" />
     <Compile Include="Models\OnLineUsers.cs" />
     <Compile Include="Models\PasswordView.cs" />
+    <Compile Include="Models\RelationshipRepository.cs" />
     <Compile Include="Models\Repository.cs" />
     <Compile Include="Models\ResetPasswordCommand.cs" />
     <Compile Include="Models\SelectListUtilities.cs" />
@@ -286,6 +288,7 @@
     <Content Include="Views\Accounts\LoginsJournal.cshtml" />
     <Content Include="Views\FriendShips\Index.cshtml" />
     <Content Include="Views\Accounts\GetConnections.cshtml" />
+    <Content Include="Views\FriendShips\GetRelationships.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Notifications\" />

@@ -6,6 +6,14 @@
           data-placement="@ToolTipPlacement">
     </span>
 }
+@helper StaticIcon(string controlId, string icon_class, string TooltipMessage, string ToolTipPlacement = "bottom")
+{
+    <span id="@controlId"
+          class="static-icon fa @icon_class"
+          title="@TooltipMessage"
+          data-placement="@ToolTipPlacement">
+    </span>
+}
 @helper ImageCmd(string controller, string action, string imageUrl, string imageClass, string title)
 {
     var Url = new System.Web.Mvc.UrlHelper(HttpContext.Current.Request.RequestContext);
