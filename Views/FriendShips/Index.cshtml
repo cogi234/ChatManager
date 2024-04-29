@@ -48,21 +48,18 @@
                     GetUsersList.command("@Url.Action("SendRequest")" + "?userid=" + userid);
                 }
             );
-
             $(".remove-request").click(
                 function () {
                     let userid = this.id.split('_')[1];
-                    GetUsersList.confirmedCommand("Enlever l'amitié?", "@Url.Action("RemoveRequest")" + "?userid=" + userid);
+                    GetUsersList.confirmedCommand("Retirer l'amitié?", "@Url.Action("RemoveRequest")" + "?userid=" + userid);
                 }
             );
-
             $(".accept-request").click(
                 function () {
                     let userid = this.id.split('_')[1];
                     GetUsersList.command("@Url.Action("AcceptRequest")" + "?userid=" + userid);
                 }
             )
-
             $(".deny-request").click(
                 function () {
                     let userid = this.id.split('_')[1];
