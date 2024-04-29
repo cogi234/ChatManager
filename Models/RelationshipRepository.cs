@@ -199,9 +199,9 @@ namespace MoviesDBManager.Models
             if (!TransactionOnGoing) mutex.WaitOne();
             try
             {
-                Relationship dataToDelete = Get(Id);
-                if (dataToDelete != null)
+                if (Exists(Id))
                 {
+                    Relationship dataToDelete = Get(Id);
                     dataList.RemoveAt(dataList.IndexOf(dataToDelete));
                     UpdateFile();
                     return true;
