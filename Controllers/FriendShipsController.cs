@@ -27,7 +27,7 @@ namespace MoviesDBManager.Controllers
 
                 //We filter on the search
                 if (!search.IsNullOrWhiteSpace())
-                    users = users.Where((u) => u.GetFullName().Contains(search));
+                    users = users.Where((u) => u.GetFullName().ToLower().Contains(search.ToLower()));
                 //We filter blocked users
                 if (!displayBlocked)
                     users = users.Where((u) => !u.Blocked);

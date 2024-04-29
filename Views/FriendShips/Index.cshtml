@@ -70,5 +70,48 @@
                 }
             )
         }
+
+
+        let partialUrl = "@Url.Action("GetRelationships")";
+        let parameters = ["", true, true, true, true, true, true];
+
+        function UpdateSearchParam() {
+            let completeUrl = partialUrl + "?search=" + parameters[0] + "&displayNoRelation=" + parameters[1] + "&displayRequest=" + parameters[2] + "&displayWaiting=" + parameters[3]
+                + "&displayFriend=" + parameters[4] + "&displayDenied=" + parameters[5] + "&displayBlocked=" + parameters[6];
+            GetUsersList.serviceURL = completeUrl;
+            GetUsersList.refresh(true);
+        }
+
+        $('#SearchCommand').click(function () {
+            parameters[0] = $("#Search").val();
+            UpdateSearchParam();
+        });
+
+        $('#filter_NotFriend').click(function () {
+            parameters[1] = $(this).is(':checked');
+            UpdateSearchParam();
+        })
+        $('#filter_Request').click(function () {
+            parameters[2] = $(this).is(':checked');
+            UpdateSearchParam();
+        })
+        $('#filter_Pending').click(function () {
+            parameters[3] = $(this).is(':checked');
+            UpdateSearchParam();
+        })
+        $('#filter_Friend').click(function () {
+            parameters[4] = $(this).is(':checked');
+            UpdateSearchParam();
+        })
+        $('#filter_Refused').click(function () {
+            parameters[5] = $(this).is(':checked');
+            UpdateSearchParam();
+        })
+        $('#filter_Blocked').click(function () {
+            parameters[6] = $(this).is(':checked');
+            UpdateSearchParam();
+        })
+
+
     </script>
 }
