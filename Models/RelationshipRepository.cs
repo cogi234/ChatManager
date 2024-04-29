@@ -135,7 +135,7 @@ namespace MoviesDBManager.Models
         // Read one
         public Relationship Get((int from, int to) id)
         {
-            var relationship = dataList.FirstOrDefault(d => d.Id == id);
+            Relationship relationship = dataList.FirstOrDefault(d => d.Id == id);
             if (relationship == null)
             {
                 relationship = new Relationship();
@@ -144,6 +144,7 @@ namespace MoviesDBManager.Models
             }
             return relationship;
         }
+        public bool Exists((int from, int to) id) => dataList.FirstOrDefault(d => d.Id == id) != null;
         // Create one
         public virtual (int from, int to) Add(Relationship data)
         {
@@ -173,9 +174,9 @@ namespace MoviesDBManager.Models
             if (!TransactionOnGoing) mutex.WaitOne();
             try
             {
-                Relationship dataToUpdate = Get(data.Id);
-                if (dataToUpdate != null)
+                if (Exists(data.Id))
                 {
+                    Relationship dataToUpdate = Get(data.Id);
                     dataList[dataList.IndexOf(dataToUpdate)] = data;
                     UpdateFile();
                 } else
