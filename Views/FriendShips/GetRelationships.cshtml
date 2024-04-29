@@ -7,60 +7,57 @@
 
 @foreach (User user in Model)
 {
-    if (user.Id != currentUser.Id)
-    {
-        string emailReference = "mailto:" + user.Email;
-        bool isOnline = OnlineUsers.IsOnLine(user.Id);
-        Relationship fromRelationship = DB.Relationships.Get((user.Id, currentUser.Id));
-        Relationship toRelationship = DB.Relationships.Get((currentUser.Id, user.Id));
+    string emailReference = "mailto:" + user.Email;
+    bool isOnline = OnlineUsers.IsOnLine(user.Id);
+    Relationship fromRelationship = DB.Relationships.Get((user.Id, currentUser.Id));
+    Relationship toRelationship = DB.Relationships.Get((currentUser.Id, user.Id));
 
 
-        <div class="userContainer" style="font-size:14px;">
-            <a href="@emailReference">
-                @Helper.AvatarUser(user, "UserSmallAvatar")
-            </a>
-            <div style="text-align:center" title="Status de connexion">
-                @Helper.OnLineStatusIcon(isOnline, user.Blocked)
-            </div>
-            @if (user.Blocked)
-            {
-                //Cas 7
-                @Helper.StaticIcon("", "fa-ban red", "Bloqué");
-            }
-            else if (toRelationship.Status == RelationshipStatus.Denied)
-            {
-                // Cas 6
-                @Helper.StaticIcon("", "fa-times-circle red", "Demande d'amitié refusée");
-            }
-            else if (toRelationship.Status == RelationshipStatus.Friend || fromRelationship.Status == RelationshipStatus.Friend)
-            {
-                // Cas 4
-                @Helper.StaticIcon("", "fa-check-circle green", "Amis");
-                @Helper.Icon("remove_" + user.Id, "fa-times red remove-request", "Retirer l'amitié");
-            }
-            else if (fromRelationship.Status == RelationshipStatus.Request)
-            {
-                // Cas 2
-                @Helper.Icon("accept_" + user.Id, "fa-check green accept-request", "Accepter la demande d'amitié");
-                @Helper.Icon("deny_" + user.Id, "fa-times red deny-request", "Refuser la demande d'amitié");
-            }
-            else if (fromRelationship.Status == RelationshipStatus.Denied)
-            {
-                // Cas 5
-                @Helper.StaticIcon("", "fa-times-circle red", "Demande d'amitié refusée");
-                @Helper.Icon("send_" + user.Id, "fa-plus-circle green send-request", "Envoyer un demande d'amitié");
-            }
-            else if (toRelationship.Status == RelationshipStatus.Request)
-            {
-                // Cas 3
-                @Helper.StaticIcon("", "fa-clock-o green", "Demande d'amitié en attente");
-                @Helper.Icon("remove_" + user.Id, "fa-times red remove-request", "Retirer la demande d'amitié");
-            }
-            else
-            {
-                //Cas 1
-                @Helper.Icon("send_" + user.Id, "fa-plus-circle green send-request", "Envoyer un demande d'amitié");
-            }
+    <div class="userContainer" style="font-size:14px;">
+        <a href="@emailReference">
+            @Helper.AvatarUser(user, "UserSmallAvatar")
+        </a>
+        <div style="text-align:center" title="Status de connexion">
+            @Helper.OnLineStatusIcon(isOnline, user.Blocked)
         </div>
-    }
+        @if (user.Blocked)
+        {
+            //Cas 7
+            @Helper.StaticIcon("", "fa-ban red", "Bloqué");
+        }
+        else if (toRelationship.Status == RelationshipStatus.Denied)
+        {
+            // Cas 6
+            @Helper.StaticIcon("", "fa-times-circle red", "Demande d'amitié refusée");
+        }
+        else if (toRelationship.Status == RelationshipStatus.Friend || fromRelationship.Status == RelationshipStatus.Friend)
+        {
+            // Cas 4
+            @Helper.StaticIcon("", "fa-check-circle green", "Amis");
+            @Helper.Icon("remove_" + user.Id, "fa-times red remove-request", "Retirer l'amitié");
+        }
+        else if (fromRelationship.Status == RelationshipStatus.Request)
+        {
+            // Cas 2
+            @Helper.Icon("accept_" + user.Id, "fa-check green accept-request", "Accepter la demande d'amitié");
+            @Helper.Icon("deny_" + user.Id, "fa-times red deny-request", "Refuser la demande d'amitié");
+        }
+        else if (fromRelationship.Status == RelationshipStatus.Denied)
+        {
+            // Cas 5
+            @Helper.StaticIcon("", "fa-times-circle red", "Demande d'amitié refusée");
+            @Helper.Icon("send_" + user.Id, "fa-plus-circle green send-request", "Envoyer un demande d'amitié");
+        }
+        else if (toRelationship.Status == RelationshipStatus.Request)
+        {
+            // Cas 3
+            @Helper.StaticIcon("", "fa-clock-o green", "Demande d'amitié en attente");
+            @Helper.Icon("remove_" + user.Id, "fa-times red remove-request", "Retirer la demande d'amitié");
+        }
+        else
+        {
+            //Cas 1
+            @Helper.Icon("send_" + user.Id, "fa-plus-circle green send-request", "Envoyer un demande d'amitié");
+        }
+    </div>
 }

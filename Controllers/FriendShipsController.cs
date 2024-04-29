@@ -22,8 +22,8 @@ namespace MoviesDBManager.Controllers
         {
             if (forceRefresh || OnlineUsers.HasChanged() || DB.Users.HasChanged || DB.Relationships.HasChanged)
             {
-                IEnumerable<User> users = DB.Users.SortedUsers().Where((u) => u.Verified);
                 User currentUser = OnlineUsers.GetSessionUser();
+                IEnumerable<User> users = DB.Users.SortedUsers().Where((u) => u.Verified && u.Id != currentUser.Id);
 
                 //We filter on the search
                 if (!search.IsNullOrWhiteSpace())
