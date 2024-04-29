@@ -29,7 +29,7 @@
             $(".remove-request").click(
                 function () {
                     let userid = this.id.split('_')[1];
-                    GetUsersList.command("@Url.Action("RemoveRequest")" + "?userid=" + userid);
+                    GetUsersList.confirmedCommand("Enlever l'amitié?", "@Url.Action("RemoveRequest")" + "?userid=" + userid);
                 }
             );
 
