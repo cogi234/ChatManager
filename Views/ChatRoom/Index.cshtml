@@ -40,7 +40,7 @@
             function UpdateFriendsListUIEventCallbacks() {
                 $(".unselectedTarget").click(function () {
                     var userId = $(this).attr("userid");
-                    ajaxActionCall("/ChatRoom/SetCurrentTarget/" + userId, () => { friendsPanelUpdater.refresh(true); messagesPanelUpdater.refresh(true); });
+                    friendsPanelUpdater.command("/ChatRoom/SetCurrentTarget?target=" + userId, () => { friendsPanelUpdater.refresh(true); messagesPanelUpdater.refresh(true); });
                     $("#sendMessagePanel").show();
                 })
             }

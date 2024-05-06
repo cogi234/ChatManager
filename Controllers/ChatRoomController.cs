@@ -57,9 +57,9 @@ namespace ChatManager.Controllers
         }
 
         #region Actions
-        public void SetCurrentTarget(int targetUser)
+        public void SetCurrentTarget(int target)
         {
-            TargetUser = targetUser;
+            TargetUser = target;
         }
 
         public void Send(string message)

@@ -1,40 +1,52 @@
 ﻿@using ChatManager.Models;
+@using System.Globalization;
 
 @model IEnumerable<Message>
 
-@{
+@if (ChatManager.Controllers.ChatRoomController.TargetUser != 0)
+{
     var targetUser = DB.Users.Get(ChatManager.Controllers.ChatRoomController.TargetUser);
     var onlineUser = OnlineUsers.GetSessionUser();
-}
+    var lastMessageTime = DateTime.MinValue;
 
-<div class="messagesHeader">
-    <h4>Conversation avec </h4>
-    <div style="display: flex; align-items: center; gap:10px">
-        @Helper.AvatarUser(targetUser)
-        @Helper.OnLineStatusIcon(OnlineUsers.IsOnLine(targetUser.Id))
+    <div class="messagesHeader">
+        <h4>Conversation avec </h4>
+        <div style="display: flex; align-items: center; gap:10px">
+            @Helper.AvatarUser(targetUser)
+            @Helper.OnLineStatusIcon(OnlineUsers.IsOnLine(targetUser.Id))
+        </div>
     </div>
-</div>
 
-@foreach (Message message in Model)
-{
-    if (message.To == onlineUser.Id)
+    foreach (Message message in Model)
     {
-        <div class="receivedLayout">
-            <div id="received_@message.Id" class="received" title="@message.ReadTime.TimeOfDay.ToString()">
-                @Helper.ParseContent(message.Content)
+        if (message.SendTime - lastMessageTime > TimeSpan.FromMinutes(30))
+        {
+            <div class="messageTime">
+                @message.SendTime.ToString("d MMMM yyyy - HH:mm", new CultureInfo("fr-CA"))
             </div>
-        </div>
-    }
-    else
-    {
-        <div class="sentLayout">
-            <div id="sent_@message.Id" class="sent" title="@message.SendTime.TimeOfDay.ToString()">
-                @Helper.ParseContent(message.Content)
+        }
+
+        lastMessageTime = message.SendTime;
+
+        if (message.To == onlineUser.Id)
+        {
+            <div class="receivedLayout">
+                <div id="received_@message.Id" class="received" title="@message.ReadTime.TimeOfDay.ToString()">
+                    @Helper.ParseContent(message.Content)
+                </div>
             </div>
-            @if (message.ReadTime == DateTime.MinValue)
-            {
-                <div class="unreadIndicator" title="Message non lu"></div>
-            }
-        </div>
+        }
+        else
+        {
+            <div class="sentLayout">
+                <div id="sent_@message.Id" class="sent" title="@message.SendTime.TimeOfDay.ToString()">
+                    @Helper.ParseContent(message.Content)
+                </div>
+                @if (message.ReadTime == DateTime.MinValue)
+                {
+                    <div class="unreadIndicator" title="Message non lu"></div>
+                }
+            </div>
+        }
     }
 }
