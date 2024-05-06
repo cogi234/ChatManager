@@ -245,7 +245,7 @@ namespace ChatManager.Models
                 {
                     BeginTransaction();
                     RemoveResetPasswordCommands(user.Id);
-                    var result = base.Update(user);
+                    bool result = base.Update(user);
                     EndTransaction();
                     return result;
                 }

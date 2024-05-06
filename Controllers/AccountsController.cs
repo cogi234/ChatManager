@@ -1,9 +1,9 @@
-﻿using System;
+﻿using ChatManager.Models;
+using Mail;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using ChatManager.Models;
-using Mail;
 
 
 namespace ChatManager.Controllers
@@ -506,9 +506,9 @@ namespace ChatManager.Controllers
         [OnlineUsers.AdminAccess]
         public void DeleteConnectionDay(DateTime date)
         {
-            var connections = DB.Connections.ToList();
+            List<Connection> connections = DB.Connections.ToList();
             List<int> toDelete = new List<int>();
-            foreach (var connection in connections)
+            foreach (Connection connection in connections)
             {
                 if (connection.StartDate.Date == date.Date)
                 {

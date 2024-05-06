@@ -1,7 +1,148 @@
-﻿
+﻿@using ChatManager.Models;
+
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Salle de clavardage";
 }
 
-<h2>Salle de clavardage</h2>
+<div style="display:grid; grid-template-columns: 65px auto; align-items:center">
+    <img src="/Content/UI-Icons/chatRoom.png" style="width:56px">
+    <h3>Salle de discussions</h3>
+</div>
+<hr />
+<div class="main">
+    <div class="chatroomContainer">
+        <div id="friendsListContainer" class="friendsListContainer" title="Cliquez sur un de vos amis pour clavarder avec lui..."></div>
+        <div>
+            <div id="messagesPanel" class="messagesPanel" title="Cliquez sur un de vos messages pour l'éditer...">
 
+            </div>
+            <div id="sendMessagePanel" class="sendMessageLayout">
+                <input id="message" class="form-control" style="width:100% !important; max-width:1000px !important;"
+                       placeholder="Tapez votre message ici ..." title="Les urls d'image sont prises en compte.">
+                <span id="send" class="icon fa fa-paper-plane" title="Envoyer" data-placement="bottom"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(function () {
+            let friendsPanelUpdater = new PartialRefresh("/ChatRoom/GetFriendsList", "friendsListContainer", 5, UpdateFriendsListUIEventCallbacks);
+            let messagesPanelUpdater = new PartialRefresh("/ChatRoom/GetConversation", "messagesPanel", 5, UpdateMessagesPanelUIEventCallbacks);
+
+            let currentTargetId = @ChatManager.Controllers.ChatRoomController.TargetUser;
+            if (currentTargetId == 0)
+                $("#sendMessagePanel").hide();
+
+            function UpdateFriendsListUIEventCallbacks() {
+                $(".unselectedTarget").click(function () {
+                    var userId = $(this).attr("userid");
+                    ajaxActionCall("/ChatRoom/SetCurrentTarget/" + userId, () => { friendsPanelUpdater.refresh(true); messagesPanelUpdater.refresh(true); });
+                    $("#sendMessagePanel").show();
+                })
+            }
+
+            ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // Message sender handling
+            function sendMessage() {
+                var message = $('#message').val();
+                $('#message').val("");
+                if (message != "") {
+                    messagesPanelUpdater.command("/ChatRoom/Send?message=" + message, UpdateMessagesPanelUIEventCallbacks);
+                }
+            }
+            $('#message').keypress(function (event) {
+                var keycode = (event.keyCode ? event.keyCode : event.which);
+                if (keycode == '13') {
+                    sendMessage();
+                }
+            });
+            $(document).on('keyup', function (event) {
+                if (event.key == "Escape") {
+                    $("#message").val("");
+                }
+            });
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+            let editor = null;
+            let targetedMessageContainer = null;
+
+            function deleteMessageEditor() {
+                if (editor != null) {
+                    editor.remove();
+                    messagesPanelUpdater.restart();
+                    editor = null;
+                }
+                if (targetedMessageContainer != null)
+                    targetedMessageContainer.show();
+            }
+            $(document).click(function () { deleteMessageEditor(); })
+
+            function createMessageEditor(messageId) {
+                deleteMessageEditor();
+                messagesPanelUpdater.pause();
+                targetedMessageContainer = $(`#sent_${messageId}`);
+
+                messagesPanelUpdater.command(`/ChatRoom/GetMessage?id=${messageId}`, function (messageText) {
+                    targetedMessageContainer.hide();
+                    let input = $(`<textarea>${messageText.trim()}</textarea>"`);
+                    let acceptCmd = $(`<span class="icon smallerIcon fa fa-check" title="Modifier"></span>`);
+                    let deleteCmd = $(`<span class="icon smallerIcon fa fa-trash" title="Effacer ce message"></span>`);
+                    editor = $(`<div class="messageEditorContainer" id="messageEditor" >`);
+                    editor.append(input, acceptCmd, deleteCmd);
+                    editor.insertAfter(targetedMessageContainer);
+                    input.height(input[0].scrollHeight - 20);
+                    input.focus();
+                    input.val(input.val() + ' ');
+                    input.keyup(function (event) {
+                        if (event.key == "Escape") {
+                            targetedMessageContainer.show();
+                            deleteMessageEditor();
+                            messagesPanelUpdater.restart();
+                        }
+                    })
+                    input.click(function (event) {
+                        event.stopPropagation()
+                    })
+                    acceptCmd.click(function () {
+                        messagesPanelUpdater.command(`/ChatRoom/UpdateMessage?id=${messageId}&message=${input.val()}`);
+                        messagesPanelUpdater.restart();
+                    })
+                    deleteCmd.click(function () {
+                        bootbox.confirm("Effacer ce message?", function (result) {
+                            if (result) {
+                                messagesPanelUpdater.command(`/ChatRoom/DeleteMessage?id=${messageId}`);
+                                messagesPanelUpdater.restart();
+                            }
+                        })
+                    })
+                })
+            }
+
+            function UpdateMessagesPanelUIEventCallbacks() {
+                $("#typing").hide();
+                $(".editMessage").hide();
+                $("#messagesPanel").scrollTop($("#messagesPanel")[0].scrollHeight + 100);
+
+                $(".contentImage").click(function (event) {
+                    event.stopPropagation();
+                })
+                $("a").click(function (event) {
+                    event.stopPropagation();
+                })
+                $(".sent").click(function () {
+                    var messageId = $(this).attr("id").split("_")[1];
+                    createMessageEditor(messageId);
+                });
+            }
+
+            $("#send").click(function () {
+                sendMessage();
+            })
+        })
+    </script>
+}

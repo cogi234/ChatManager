@@ -31,7 +31,7 @@ namespace MoviesDBManager.Models
             dataList.Clear();
             try
             {
-                using (var sr = new StreamReader(FilePath))
+                using (StreamReader sr = new StreamReader(FilePath))
                     dataList = JsonConvert.DeserializeObject<List<Relationship>>(sr.ReadToEnd());
             }
             catch (Exception e)
@@ -46,7 +46,7 @@ namespace MoviesDBManager.Models
         {
             try
             {
-                using (var sw = new StreamWriter(FilePath))
+                using (StreamWriter sw = new StreamWriter(FilePath))
                     sw.WriteLine(JsonConvert.SerializeObject(dataList));
                 ReadFile();
             }
@@ -179,7 +179,8 @@ namespace MoviesDBManager.Models
                     Relationship dataToUpdate = Get(data.Id);
                     dataList[dataList.IndexOf(dataToUpdate)] = data;
                     UpdateFile();
-                } else
+                }
+                else
                 {
                     Add(data);
                 }

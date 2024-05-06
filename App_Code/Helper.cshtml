@@ -133,12 +133,17 @@
              style="background: url(@avatar)"></div>
     </a>
 }
+@helper avatar(ChatManager.Models.User user, string avatarClass = "UserMediumAvatar")
+{
+    var avatarUrl = user.Avatar;
+    <div class="@avatarClass" style="background: url(@avatarUrl)"></div>
+}
 @helper AvatarUser(ChatManager.Models.User user, string avatarClass = "UserMediumAvatar")
 {
     var Url = new System.Web.Mvc.UrlHelper(HttpContext.Current.Request.RequestContext);
     var avatarUrl = user.Avatar;
     <div class="userItem">
-        <div class="@avatarClass" style="background: url(@avatarUrl)"></div>
+        @avatar(user, avatarClass)
         <div class="ellipsis">@user.GetFullName()</div>
     </div>
 }

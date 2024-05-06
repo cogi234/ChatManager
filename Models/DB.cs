@@ -1,10 +1,5 @@
 ﻿using MoviesDBManager.Models;
-using System;
-using System.Collections.Generic;
-using System.EnterpriseServices.Internal;
-using System.Linq;
 using System.Reflection;
-using System.Web;
 using System.Web.Hosting;
 
 namespace ChatManager.Models
@@ -20,7 +15,8 @@ namespace ChatManager.Models
         public static Repository<UnverifiedEmail> UnverifiedEmails { get; set; }
         public static Repository<ResetPasswordCommand> ResetPasswordCommands { get; set; }
         public static Repository<Connection> Connections { get; set; }
-       
+        public static Repository<Message> Messages { get; set; }
+
         public DB()
         {
             Users = new UsersRepository();
@@ -30,7 +26,8 @@ namespace ChatManager.Models
             UnverifiedEmails = new Repository<UnverifiedEmail>();
             ResetPasswordCommands = new Repository<ResetPasswordCommand>();
             Connections = new Repository<Connection>();
-           
+            Messages = new Repository<Message>();
+
             InitRepositories(this);
         }
         public static DB Instance

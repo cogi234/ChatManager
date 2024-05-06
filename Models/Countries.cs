@@ -27,7 +27,7 @@ namespace ChatManager.Models
         private static List<Country> _countries = new List<Country>();
         private static void LoadCountries()
         {
-            var httpServerUtility = new HttpServerUtilityWrapper(HttpContext.Current.Server);
+            HttpServerUtilityWrapper httpServerUtility = new HttpServerUtilityWrapper(HttpContext.Current.Server);
             string iso3166Path = httpServerUtility.MapPath(Iso3166File);
             try
             {
@@ -61,13 +61,13 @@ namespace ChatManager.Models
         }
         public static Country Get(string code)
         {
-            var country = List.FirstOrDefault(c => c.Code == code);
+            Country country = List.FirstOrDefault(c => c.Code == code);
             return country;
         }
         public static string FlagUrl(string code)
         {
             string url = string.Empty;
-            var country = Get(code);
+            Country country = Get(code);
             if (country != null)
                 url = country.Flag;
             return url;

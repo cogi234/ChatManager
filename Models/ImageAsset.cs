@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Web;
 using System.Web.Hosting;
 
 namespace ChatManager.Models
@@ -41,11 +38,11 @@ namespace ChatManager.Models
         }
         public void Delete(T data)
         {
-            var type = data.GetType();
+            Type type = data.GetType();
 
-            foreach (var property in type.GetProperties())
+            foreach (PropertyInfo property in type.GetProperties())
             {
-                var attribute = property.GetCustomAttribute(typeof(ImageAssetAttribute));
+                Attribute attribute = property.GetCustomAttribute(typeof(ImageAssetAttribute));
 
                 if (attribute != null)
                 {
@@ -60,8 +57,8 @@ namespace ChatManager.Models
         }
         public void Update(T data)
         {
-            var type = data.GetType();
-            foreach (var property in type.GetProperties())
+            Type type = data.GetType();
+            foreach (PropertyInfo property in type.GetProperties())
             {
                 ImageAssetAttribute assetAttribute = (ImageAssetAttribute)property.GetCustomAttribute(typeof(ImageAssetAttribute), true);
 
@@ -87,15 +84,15 @@ namespace ChatManager.Models
                         string newAssetServerPath;
                         do
                         {
-                            var key = Guid.NewGuid().ToString();
+                            string key = Guid.NewGuid().ToString();
                             assetUrl = assetsFolder + key + "." + extension;
                             newAssetServerPath = HostingEnvironment.MapPath(assetUrl);
                             // make sure new file does not already exists 
                         } while (File.Exists(newAssetServerPath));
                         SetAttributeValue(data, propName, assetUrl);
-                        using (var stream = new MemoryStream(Convert.FromBase64String(assetData)))
+                        using (MemoryStream stream = new MemoryStream(Convert.FromBase64String(assetData)))
                         {
-                            using (var file = new FileStream(newAssetServerPath, FileMode.Create, FileAccess.Write))
+                            using (FileStream file = new FileStream(newAssetServerPath, FileMode.Create, FileAccess.Write))
                                 stream.WriteTo(file);
                         }
                     }

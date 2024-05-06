@@ -1,13 +1,11 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.EnterpriseServices;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Web;
-using System.Web.Hosting;
 
 namespace ChatManager.Models
 {
@@ -54,9 +52,9 @@ namespace ChatManager.Models
         // Vérifier si l'attribut attributeName est présent dans la classe T
         private bool AttributeNameExist(string attributeName)
         {
-            var instance = Activator.CreateInstance(typeof(T));
-            var type = instance.GetType();
-            var pro = type.GetProperty(attributeName);
+            object instance = Activator.CreateInstance(typeof(T));
+            Type type = instance.GetType();
+            PropertyInfo pro = type.GetProperty(attributeName);
             return (instance.GetType().GetProperty(attributeName) != null);
         }
         // retourne la valeur de l'attribut Id d'une instance de classe T
@@ -71,7 +69,7 @@ namespace ChatManager.Models
             dataList.Clear();
             try
             {
-                using (var sr = new StreamReader(FilePath))
+                using (StreamReader sr = new StreamReader(FilePath))
                     dataList = JsonConvert.DeserializeObject<List<T>>(sr.ReadToEnd());
             }
             catch (Exception e)
@@ -86,7 +84,7 @@ namespace ChatManager.Models
         {
             try
             {
-                using (var sw = new StreamWriter(FilePath))
+                using (StreamWriter sw = new StreamWriter(FilePath))
                     sw.WriteLine(JsonConvert.SerializeObject(dataList));
                 ReadFile();
             }
@@ -99,7 +97,7 @@ namespace ChatManager.Models
         private int NextId()
         {
             int maxId = 0;
-            foreach (var data in dataList)
+            foreach (T data in dataList)
             {
                 int Id = this.Id(data);
                 if (Id > maxId) maxId = Id;

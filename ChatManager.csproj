@@ -129,6 +129,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Message.cs" />
     <Compile Include="Models\Relationship.cs" />
     <Compile Include="Models\GroupEmail.cs" />
     <Compile Include="Models\EmailView.cs" />
@@ -291,6 +292,8 @@
     <Content Include="Views\FriendShips\Index.cshtml" />
     <Content Include="Views\Accounts\GetConnections.cshtml" />
     <Content Include="Views\FriendShips\GetRelationships.cshtml" />
+    <Content Include="Views\ChatRoom\GetFriendsList.cshtml" />
+    <Content Include="Views\ChatRoom\GetConversation.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Notifications\" />

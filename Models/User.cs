@@ -1,9 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 
 namespace ChatManager.Models
 {
@@ -13,7 +10,7 @@ namespace ChatManager.Models
         public const string Default_Avatar = @"no_avatar.png";
 
         [JsonIgnore]
-        public static string DefaultImage {  get { return User_Avatars_Folder + Default_Avatar; } }
+        public static string DefaultImage { get { return User_Avatars_Folder + Default_Avatar; } }
 
         public User Clone()
         {

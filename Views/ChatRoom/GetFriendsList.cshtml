@@ -1,0 +1,20 @@
+﻿@using ChatManager.Models;
+
+@model IEnumerable<User>
+
+
+@foreach (User user in Model)
+{
+    if (user.Id == ChatManager.Controllers.ChatRoomController.TargetUser)
+    {
+        <div class="selectedTarget" userid="@user.Id">
+            @Helper.avatar(user, "UserSmallAvatar")
+        </div>
+    }
+    else
+    {
+        <div class="unselectedTarget" userid="@user.Id">
+            @Helper.avatar(user, "UserSmallAvatar")
+        </div>
+    }
+}
