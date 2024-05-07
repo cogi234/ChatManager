@@ -1,0 +1,36 @@
+﻿@model ChatManager.Models.User
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm())
+{
+    <div class="formLayout">
+        <fieldset>
+            <div class="legend">Identification</div>
+            @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control", placeholder = @Html.DisplayNameFor(model => model.FirstName) } })
+            @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+            <br />
+            @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control", placeholder = @Html.DisplayNameFor(model => model.LastName) } })
+            @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+        </fieldset>
+        <fieldset>
+            <div class="legend">@Html.DisplayNameFor(model => model.Email)</div>
+            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", placeholder = @Html.DisplayNameFor(model => model.Email) } })
+            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            <br />
+            @Html.EditorFor(model => model.ConfirmEmail, new { htmlAttributes = new { @class = "form-control", placeholder = @Html.DisplayNameFor(model => model.ConfirmEmail) } })
+            @Html.ValidationMessageFor(model => model.ConfirmEmail, "", new { @class = "text-danger" })
+        </fieldset>
+        <fieldset>
+            <div class="legend">@Html.DisplayNameFor(model => model.Avatar)</div>
+            @Helper.ImageUploader("Avatar", Model.Avatar, "Cliquez pour choisir votre avatar")
+            @Html.ValidationMessageFor(model => model.Avatar, "", new { @class = "text-danger" })
+        </fieldset>
+
+
+
+    </div>
+}
