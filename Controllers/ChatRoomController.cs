@@ -83,6 +83,7 @@ namespace ChatManager.Controllers
             Message oldMessage = DB.Messages.Get(id);
 
             oldMessage.Content = message;
+            oldMessage.ReadTime = DateTime.MinValue;
 
             DB.Messages.Update(oldMessage);
         }
