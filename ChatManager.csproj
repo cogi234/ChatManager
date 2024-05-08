@@ -207,14 +207,6 @@
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="App_Code\Helper.cshtml" />
-    <Content Include="App_Data\UserTypes.json" />
-    <Content Include="App_Data\Genders.json" />
-    <Content Include="App_Data\ResetPasswordCommands.json" />
-    <Content Include="App_Data\Users.json" />
-    <Content Include="App_Data\Connections.json" />
-    <Content Include="App_Data\UnverifiedEmails.json" />
-    <Content Include="App_Data\Relationships.json" />
-    <Content Include="App_Data\Messages.json" />
     <None Include="Properties\PublishProfiles\ChatManager20240415124919 - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\ChatManager20240429144527 - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\MDB2023 - Web Deploy.pubxml" />
