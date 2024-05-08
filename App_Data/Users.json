@@ -119,7 +119,7 @@
   {
     "Id": 10,
     "UserTypeId": 3,
-    "Verified": false,
+    "Verified": true,
     "Blocked": false,
     "FirstName": "Olivier",
     "LastName": "Lenheim",
