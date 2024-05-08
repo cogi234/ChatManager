@@ -5,15 +5,16 @@
 
 @foreach (User user in Model)
 {
+    bool canChat = DB.Relationships.Get((OnlineUsers.GetSessionUser().Id, ChatManager.Controllers.ChatRoomController.TargetUser)).Status == RelationshipStatus.Friend;
     if (user.Id == ChatManager.Controllers.ChatRoomController.TargetUser)
     {
-        <div class="selectedTarget" userid="@user.Id" title="@user.GetFullName()">
+        <div class="selectedTarget" userid="@user.Id" canChat="@canChat" title="@user.GetFullName()">
             @Helper.avatar(user, "UserSmallAvatar")
         </div>
     }
     else
     {
-        <div class="unselectedTarget" userid="@user.Id" title="@user.GetFullName()">
+        <div class="unselectedTarget" userid="@user.Id" canChat="@canChat" title="@user.GetFullName()">
             @Helper.avatar(user, "UserSmallAvatar")
         </div>
     }

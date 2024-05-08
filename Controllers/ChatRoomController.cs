@@ -68,9 +68,14 @@ namespace ChatManager.Controllers
             if (TargetUser == 0)
                 return;
 
+            int sessionUserId = OnlineUsers.GetSessionUser().Id;
+
+            if (DB.Relationships.Get((sessionUserId, TargetUser)).Status != RelationshipStatus.Friend)
+                return;
+
             Message newMessage = new Message();
             newMessage.Content = message;
-            newMessage.From = OnlineUsers.GetSessionUser().Id;
+            newMessage.From = sessionUserId;
             newMessage.To = TargetUser;
 
             DB.Messages.Add(newMessage);

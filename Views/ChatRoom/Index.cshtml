@@ -41,8 +41,13 @@
                 $(".unselectedTarget").click(function () {
                     var userId = $(this).attr("userid");
                     friendsPanelUpdater.command("/ChatRoom/SetCurrentTarget?target=" + userId, () => { friendsPanelUpdater.refresh(true); messagesPanelUpdater.refresh(true); });
-                    $("#sendMessagePanel").show();
                 })
+
+                var canChat = $(".selectedTarget").attr("canChat");
+                if (canChat != null)
+                    $("#sendMessagePanel").show();
+                else
+                    $("#sendMessagePanel").hide();
             }
 
             ////////////////////////////////////////////////////////////////////////////////////////////////////////////
