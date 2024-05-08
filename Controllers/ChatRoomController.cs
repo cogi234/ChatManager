@@ -39,7 +39,8 @@ namespace ChatManager.Controllers
 
                 IEnumerable<Message> messages = DB.Messages.ToList().Where((m) =>
                     (m.From == onlineUser.Id && m.To == TargetUser) ||
-                    (m.From == TargetUser && m.To == onlineUser.Id));
+                    (m.From == TargetUser && m.To == onlineUser.Id))
+                    .OrderBy((m) => m.SendTime);
 
                 //We mark messages as read
                 foreach (Message message in messages)
@@ -82,8 +83,6 @@ namespace ChatManager.Controllers
             Message oldMessage = DB.Messages.Get(id);
 
             oldMessage.Content = message;
-            oldMessage.SendTime = DateTime.Now;
-            oldMessage.ReadTime = DateTime.MinValue;
 
             DB.Messages.Update(oldMessage);
         }

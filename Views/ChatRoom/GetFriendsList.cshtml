@@ -7,13 +7,13 @@
 {
     if (user.Id == ChatManager.Controllers.ChatRoomController.TargetUser)
     {
-        <div class="selectedTarget" userid="@user.Id">
+        <div class="selectedTarget" userid="@user.Id" title="@user.GetFullName()">
             @Helper.avatar(user, "UserSmallAvatar")
         </div>
     }
     else
     {
-        <div class="unselectedTarget" userid="@user.Id">
+        <div class="unselectedTarget" userid="@user.Id" title="@user.GetFullName()">
             @Helper.avatar(user, "UserSmallAvatar")
         </div>
     }

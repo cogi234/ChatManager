@@ -31,7 +31,7 @@
         if (message.To == onlineUser.Id)
         {
             <div class="receivedLayout">
-                <div id="received_@message.Id" class="received" title="@message.ReadTime.TimeOfDay.ToString()">
+                <div id="received_@message.Id" class="received" title="@message.SendTime.ToString("d MMMM yyyy - HH:mm", new CultureInfo("fr-CA"))">
                     @Helper.ParseContent(message.Content)
                 </div>
             </div>
@@ -39,7 +39,7 @@
         else
         {
             <div class="sentLayout">
-                <div id="sent_@message.Id" class="sent" title="@message.SendTime.TimeOfDay.ToString()">
+                <div id="sent_@message.Id" class="sent" title="@message.SendTime.ToString("d MMMM yyyy - HH:mm", new CultureInfo("fr-CA"))">
                     @Helper.ParseContent(message.Content)
                 </div>
                 @if (message.ReadTime == DateTime.MinValue)
