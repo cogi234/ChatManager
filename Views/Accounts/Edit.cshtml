@@ -1,6 +1,8 @@
-﻿@model ChatManager.Models.User
+﻿
+@model ChatManager.Models.User
 @{
     ViewBag.Title = "Edit";
+    
 }
 
 <h2>Edit</h2>
@@ -28,6 +30,11 @@
             <div class="legend">@Html.DisplayNameFor(model => model.Avatar)</div>
             @Helper.ImageUploader("Avatar", Model.Avatar, "Cliquez pour choisir votre avatar")
             @Html.ValidationMessageFor(model => model.Avatar, "", new { @class = "text-danger" })
+        </fieldset>
+        <fieldset>
+            <div class="legend">@Html.DisplayNameFor(model => model.UserType)</div>
+            @Html.RadioButtonsGroupFor(model => model.UserType, (SelectList)ViewBag.UserTypes)
+            @Html.ValidationMessageFor(model => model.UserType, "", new { @class = "text-danger" })
         </fieldset>
 
 

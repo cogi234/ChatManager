@@ -314,6 +314,14 @@ namespace ChatManager.Controllers
             ViewBag.Genders = new SelectList(DB.Genders.ToList(), "Id", "Name", user.GenderId);
             return View(currentUser);
         }
+        public ActionResult Edit(User user)
+        {
+            User chosentUser = DB.Users.FindUser(user.Id);
+
+
+            ViewBag.Usertypes = new SelectList(DB.UserTypes.ToList(), "Id", "Name", user.UserType);
+            return View(chosentUser);
+        }
         #endregion
 
         #region Login and Logout
