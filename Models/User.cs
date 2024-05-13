@@ -32,7 +32,7 @@ namespace ChatManager.Models
         public int GenderId { get; set; }
 
         [Display(Name = "Courriel"), EmailAddress(ErrorMessage = "Invalide"), Required(ErrorMessage = "Obligatoire")]
-        [System.Web.Mvc.Remote("EmailAvailable", "Accounts", HttpMethod = "POST", ErrorMessage = "Ce courriel n'est pas disponible.")]
+        [System.Web.Mvc.Remote("EmailAvailable", "Accounts", HttpMethod = "POST", ErrorMessage = "Ce courriel n'est pas disponible.", AdditionalFields = "Id")]
         public string Email { get; set; }
 
         [Display(Name = "Avatar")]

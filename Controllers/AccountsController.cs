@@ -13,11 +13,12 @@ namespace ChatManager.Controllers
 
         #region Account creation
         [HttpPost]
-        public JsonResult EmailAvailable(string email)
+        public JsonResult EmailAvailable(string email, int id = 0)
         {
             User user = OnlineUsers.GetSessionUser();
-            int excludedId = user != null ? user.Id : 0;
-            return Json(DB.Users.EmailAvailable(email, excludedId));
+            if (id == 0)
+                id = user != null ? user.Id : 0;
+            return Json(DB.Users.EmailAvailable(email, id));
         }
 
         [HttpPost]
@@ -314,13 +315,48 @@ namespace ChatManager.Controllers
             ViewBag.Genders = new SelectList(DB.Genders.ToList(), "Id", "Name", user.GenderId);
             return View(currentUser);
         }
+        [OnlineUsers.AdminAccess]
+        public ActionResult Edit(int id)
+        {
+            User chosentUser = DB.Users.FindUser(id);
+
+
+            ViewBag.Usertypes = new SelectList(DB.UserTypes.ToList(), "Id", "Name", chosentUser.UserTypeId);
+            return View(chosentUser);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken()]
         public ActionResult Edit(User user)
         {
-            User chosentUser = DB.Users.FindUser(user.Id);
+            User currentUser = DB.Users.FindUser(user.Id);
 
+            string newEmail = "";
+            if (ModelState.IsValid) 
+            { 
 
-            ViewBag.Usertypes = new SelectList(DB.UserTypes.ToList(), "Id", "Name", user.UserType);
-            return View(chosentUser);
+                if (user.Email != currentUser.Email)
+                {
+                    newEmail = user.Email;
+                    user.Email = user.ConfirmEmail = currentUser.Email;
+                }
+                if (DB.Users.Update(user))
+                {
+                    if (newEmail != "")
+                    {
+                        SendEmailChangedVerification(user, newEmail);
+                        return RedirectToAction("EmailChangedAlert");
+                    }
+                    else
+                    {
+                        return RedirectToAction("UsersList");
+                    }
+                    
+                }
+            }
+
+            ViewBag.Usertypes = new SelectList(DB.UserTypes.ToList(), "Id", "Name", user.UserTypeId);
+            return View(currentUser);
         }
         #endregion
 
