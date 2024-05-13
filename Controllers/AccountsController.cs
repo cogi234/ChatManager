@@ -318,11 +318,10 @@ namespace ChatManager.Controllers
         [OnlineUsers.AdminAccess]
         public ActionResult Edit(int id)
         {
-            User chosentUser = DB.Users.FindUser(id);
+            User user = DB.Users.FindUser(id);
 
-
-            ViewBag.Usertypes = new SelectList(DB.UserTypes.ToList(), "Id", "Name", chosentUser.UserTypeId);
-            return View(chosentUser);
+            ViewBag.Usertypes = new SelectList(DB.UserTypes.ToList(), "Id", "Name", user.UserTypeId);
+            return View(user);
         }
 
         [HttpPost]
@@ -331,27 +330,13 @@ namespace ChatManager.Controllers
         {
             User currentUser = DB.Users.FindUser(user.Id);
 
-            string newEmail = "";
-            if (ModelState.IsValid) 
-            { 
+            if (ModelState.IsValid && !currentUser.IsAdmin)
+            {
+                user.Password = user.ConfirmPassword = currentUser.Password;
 
-                if (user.Email != currentUser.Email)
-                {
-                    newEmail = user.Email;
-                    user.Email = user.ConfirmEmail = currentUser.Email;
-                }
                 if (DB.Users.Update(user))
                 {
-                    if (newEmail != "")
-                    {
-                        SendEmailChangedVerification(user, newEmail);
-                        return RedirectToAction("EmailChangedAlert");
-                    }
-                    else
-                    {
-                        return RedirectToAction("UsersList");
-                    }
-                    
+                    return RedirectToAction("UsersList");
                 }
             }
 
