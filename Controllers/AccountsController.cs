@@ -536,7 +536,7 @@ namespace ChatManager.Controllers
         public JsonResult Delete(int userid)
         {
             User userToDelete = DB.Users.Get(userid);
-            if (userToDelete != null)
+            if (userToDelete != null && !userToDelete.IsAdmin)
             {
                 SendDeletedAccountEMail(userToDelete);
                 return Json(DB.Users.Delete(userid), JsonRequestBehavior.AllowGet);
