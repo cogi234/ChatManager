@@ -5,7 +5,15 @@
 }
 
 <div style="display:grid; grid-template-columns: 65px auto; align-items:center">
-    <img src="/Content/UI-Icons/chatRoom.png" style="width:56px">
+    @if (OnlineUsers.GetSessionUser().IsAdmin)
+    {
+        <a href="/ChatRoom/AdminIndex"><img src="/Content/UI-Icons/chatRoom.png" style="width:56px"></a>
+    }
+    else
+    {
+        <img src="/Content/UI-Icons/chatRoom.png" style="width:56px">
+    }
+
     <h3>Salle de discussions</h3>
 </div>
 <hr />

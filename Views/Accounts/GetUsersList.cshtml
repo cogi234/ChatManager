@@ -7,7 +7,7 @@
         var userLink = "";
         if (!item.IsAdmin)
         {
-            userLink = $"href=\"/Accounts/Edit/{item.Id}\"";
+            userLink = $"href=/Accounts/Edit/{item.Id}";
         }
         var emailReference = "mailto:" + item.Email;
         bool isOnline = ChatManager.Models.OnlineUsers.IsOnLine(item.Id);

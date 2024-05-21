@@ -10,6 +10,8 @@ namespace ChatManager.Controllers
     [OnlineUsers.UserAccess]
     public class ChatRoomController : Controller
     {
+        #region public
+
         // GET: ChatRoom
         public ActionResult Index()
         {
@@ -52,10 +54,37 @@ namespace ChatManager.Controllers
             return null;
         }
 
+        #endregion
+
+        #region admin
+
+        [OnlineUsers.AdminAccess]
+        public ActionResult AdminIndex()
+        {
+            return View();
+        }
+
+        [OnlineUsers.AdminAccess]
+        public ActionResult GetAllMessages(bool forceRefresh = false)
+        {
+            if (forceRefresh || DB.Messages.HasChanged)
+            {
+                IEnumerable<Message> messages = DB.Messages.ToList()
+                    .OrderBy((m) => m.From > m.To ? $"{m.From},{m.To}" : $"{m.To},{m.From}")
+                    .ThenByDescending((m) => m.SendTime);
+
+                return PartialView(messages);
+            }
+            return null;
+        }
+
+        #endregion
+
         public string GetMessage(int id)
         {
             return DB.Messages.Get(id).Content;
         }
+
 
         #region Actions
         public void SetCurrentTarget(int target)

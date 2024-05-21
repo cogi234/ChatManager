@@ -1,0 +1,46 @@
+﻿@using ChatManager.Models;
+
+@{
+    ViewBag.Title = "Salle de clavardage";
+}
+
+<div style="display:grid; grid-template-columns: 65px auto; align-items:center">
+    <h3>Conversations</h3>
+</div>
+<hr />
+<div class="main">
+    <div id="messagesPanel" class="messagesPanel">
+
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(function () {
+            let messagesPanelUpdater = new PartialRefresh("/ChatRoom/GetAllMessages", "messagesPanel", 5, UpdateMessagesPanelUIEventCallbacks);
+
+            function UpdateMessagesPanelUIEventCallbacks() {
+                $(".DELETE-MESSAGE").click(function () {
+                    let messageId = this.id.split('_')[1];
+                    bootbox.confirm("Effacer ce message?", function (result) {
+                        if (result) {
+                            messagesPanelUpdater.command(`/ChatRoom/DeleteMessage?id=${messageId}`);
+                            messagesPanelUpdater.restart();
+                        }
+                    });
+                });
+
+                $("#messagesPanel").scrollTop($("#messagesPanel")[0].scrollHeight + 100);
+
+                $(".contentImage").click(function (event) {
+                    event.stopPropagation();
+                })
+                $("a").click(function (event) {
+                    event.stopPropagation();
+                })
+            }
+        })
+    </script>
+}

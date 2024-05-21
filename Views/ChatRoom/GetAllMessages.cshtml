@@ -1,0 +1,20 @@
+﻿@using ChatManager.Models;
+@using System.Globalization;
+
+@model IEnumerable<Message>
+
+@foreach (Message message in Model)
+{
+    var from = DB.Users.Get(message.From);
+    var to = DB.Users.Get(message.To);
+
+
+    <div class="adminLayout">
+        @Helper.avatar(from, "UserSmallAvatar")
+        @Helper.avatar(to, "UserSmallAvatar")
+        <div id="delete_@message.Id" class="DELETE-MESSAGE icon fa fa-times-circle" style="font-size: 40px !important;" title="Effacer le message"></div>
+        <div id="message_@message.Id" class="sent" title="@message.SendTime.ToString("d MMMM yyyy - HH:mm", new CultureInfo("fr-CA"))">
+            @Helper.ParseContent(message.Content)
+        </div>
+    </div>
+}

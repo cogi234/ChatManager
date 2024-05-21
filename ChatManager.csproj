@@ -288,6 +288,8 @@
     <Content Include="Views\ChatRoom\GetFriendsList.cshtml" />
     <Content Include="Views\ChatRoom\GetConversation.cshtml" />
     <Content Include="Views\Accounts\Edit.cshtml" />
+    <Content Include="Views\ChatRoom\AdminIndex.cshtml" />
+    <Content Include="Views\ChatRoom\GetAllMessages.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
